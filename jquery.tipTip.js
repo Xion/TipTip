@@ -38,15 +38,16 @@
 	 	var opts = $.extend(defaults, options);
 	 	
 	 	// Setup tip tip elements and render them to the DOM
-	 	if($("#tiptip_holder").length <= 0){
-	 		var tiptip_holder = $('<div id="tiptip_holder" style="max-width:'+ opts.maxWidth +';"></div>');
-			var tiptip_content = $('<div id="tiptip_content"></div>');
-			var tiptip_arrow = $('<div id="tiptip_arrow"></div>');
-			$("body").append(tiptip_holder.html(tiptip_content).prepend(tiptip_arrow.html('<div id="tiptip_arrow_inner"></div>')));
-		} else {
-			var tiptip_holder = $("#tiptip_holder");
-			var tiptip_content = $("#tiptip_content");
-			var tiptip_arrow = $("#tiptip_arrow");
+		var tiptip_holder = $("#tiptip_holder");
+		var tiptip_content = $("#tiptip_content");
+		var tiptip_arrow = $("#tiptip_arrow");
+	 	if(tiptip_holder.length <= 0){
+			tiptip_holder = $("<div id='tiptip_holder'/>").css("max-width", opts.maxWidth);
+			tiptip_content = $("<div id='tiptip_content'/>");
+			tiptip_arrow = $("<div id='tiptip_arrow'/>");
+			tiptip_holder.empty().append(tiptip_arrow).append(tiptip_content);
+			tiptip_arrow.empty().append($("<div id='tiptip_arrow_inner'/>"));
+			$("body").append(tiptip_holder);
 		}
 		
 		return this.each(function(){
@@ -117,15 +118,8 @@
 					var arrow_top = "";
 					var arrow_left = Math.round(tip_w - 12) / 2;
 
-                    if(opts.defaultPosition == "bottom"){
-                    	t_class = "_bottom";
-                   	} else if(opts.defaultPosition == "top"){ 
-                   		t_class = "_top";
-                   	} else if(opts.defaultPosition == "left"){
-                   		t_class = "_left";
-                   	} else if(opts.defaultPosition == "right"){
-                   		t_class = "_right";
-                   	}
+					if (opts.defaultPosition in ["top", "bottom", "left", "right"])
+						t_class = "_ " + opts.defaultPosition;
 					
 					var right_compare = (w_compare + left) < parseInt($(window).scrollLeft());
 					var left_compare = (tip_w + left) > parseInt($(window).width());
