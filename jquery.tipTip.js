@@ -118,7 +118,7 @@
 					var arrow_top = "";
 					var arrow_left = Math.round(tip_w - 12) / 2;
 
-					if (opts.defaultPosition in ["top", "bottom", "left", "right"])
+					if ($.inArray(opts.defaultPosition, ["top", "bottom", "left", "right"]) >= 0)
 						t_class = "_ " + opts.defaultPosition;
 					
 					var right_compare = (w_compare + left) < parseInt($(window).scrollLeft());
