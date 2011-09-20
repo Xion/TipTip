@@ -27,6 +27,7 @@
 			maxWidth: "200px",
 			edgeOffset: 3,
 			defaultPosition: "bottom",
+			ignoreEdges: false, // Ignore browser window edges
 			delay: 400,
 			fadeIn: 200,
 			fadeOut: 200,
@@ -125,9 +126,13 @@
 					if ($.inArray(opts.defaultPosition, ["top", "bottom"]) >= 0)
 						default_vertical_class = "_" + opts.defaultPosition;
 					
-					var right_compare = (w_compare + left) < parseInt($(window).scrollLeft());
-					var left_compare = (tip_w + left) > parseInt($(window).width());
-					
+					if (opts.ignoreEdges == false) {
+						var right_compare = (w_compare + left) < parseInt($(window).scrollLeft());
+						var left_compare = (tip_w + left) > parseInt($(window).width());
+						var top_compare = (top + org_height + opts.edgeOffset + tip_h + 8) > parseInt($(window).height() + $(window).scrollTop());
+						var bottom_compare = ((top + org_height) - (opts.edgeOffset + tip_h + 8)) < 0;
+					}
+
 					if((right_compare && w_compare < 0) || (t_class == "_right" && !left_compare) || (t_class == "_left" && left < (tip_w + opts.edgeOffset + 5))){
 						t_class = "_right";
 						arrow_top = Math.round(tip_h - 13) / 2;
@@ -142,10 +147,7 @@
 						marg_top = Math.round(top + h_compare);
 					}
 
-					var top_compare = (top + org_height + opts.edgeOffset + tip_h + 8) > parseInt($(window).height() + $(window).scrollTop());
-					var bottom_compare = ((top + org_height) - (opts.edgeOffset + tip_h + 8)) < 0;
 					var vertical_class;
-					
 					if(top_compare || (t_class == "_bottom" && top_compare) || (t_class == "_top" && !bottom_compare)){
 						vertical_class = default_vertical_class || "_top";	
 						if(t_class == "_top" || t_class == "_bottom"){
@@ -161,7 +163,10 @@
 							t_class = t_class + vertical_class;
 						}
 					}
-					
+					else {
+						vertical_class = default_vertical_class;
+					}
+
 					if (vertical_class == "_top") {
 						arrow_top = tip_h;
 						marg_top = Math.round(top - (tip_h + 5 + opts.edgeOffset));
